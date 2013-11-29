@@ -7,19 +7,26 @@ using System.Runtime.InteropServices;
 
 namespace EasyTransferNet
 {
-    public class EasyTransfer<T> : IDisposable where T : struct
+
+    public struct MessageType
+    {
+        public int structSize;
+        public Type StructType;
+    }
+
+    public class EasyTransfer : IDisposable //where T : struct
     {
 
         SerialPort _serialPort = new SerialPort();
-        int structSize = 0;
-        List<byte> bBuffer = new List<byte>();
-        int frameSize = 0;
-        List<byte> frameBuffer = new List<byte>();
+        List<MessageType> _messageTypes = new List<MessageType>();
 
+        public int frameSize = 0 ;
+        public List<byte> frameBuffer = new List<byte>();
 
+        public Action<object> DataReceived;
+        MessageType _currentMessageType;
 
-
-        public Action<T> DataReceived;
+        
         public SerialPort SerialPort
         {
             get { return _serialPort; }
@@ -32,7 +39,7 @@ namespace EasyTransferNet
 
         public void Begin(string portName, int baudRate = 9600)
         {
-            structSize = Marshal.SizeOf(typeof(T));
+            //structSize = Marshal.SizeOf(typeof(T));
 
             _serialPort.PortName = portName;
             _serialPort.BaudRate = baudRate;
@@ -41,6 +48,14 @@ namespace EasyTransferNet
             _serialPort.DataBits = 8;
             _serialPort.Handshake = Handshake.None;
             _serialPort.Open();
+        }
+
+        public void RegisterMessageType(Type t)
+        {
+            _messageTypes.Add(new MessageType() { 
+                structSize = Marshal.SizeOf(t),
+                StructType = t
+            });
         }
 
         private void Stop()
@@ -53,6 +68,8 @@ namespace EasyTransferNet
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort com = (SerialPort)sender;
+
+
             //Console.WriteLine("Data Received:");
             // Buffer and process binary data
             while (com.BytesToRead > 0)
@@ -67,8 +84,9 @@ namespace EasyTransferNet
                 if (frameSize == 0)
                     if (com.ReadByte() == 0x85)
                     {
+                        _currentMessageType = _messageTypes[(byte)com.ReadByte()];
                         frameSize = com.ReadByte();
-                        if (frameSize != structSize) return;
+                        if (frameSize != _currentMessageType.structSize) return;
                     }
 
                 if (frameSize > 0)
@@ -94,7 +112,7 @@ namespace EasyTransferNet
                     byte orgCS = (byte)com.ReadByte();
                     // checksum ok
                     if (calcCS == orgCS)
-                        ProcessFrame(frameBuffer.ToArray());
+                        ProcessFrame(frameBuffer.ToArray(), _currentMessageType.StructType);
 
                     frameSize = 0;
                     frameBuffer.Clear();
@@ -102,23 +120,24 @@ namespace EasyTransferNet
             }
         }
 
-        private void ProcessFrame(byte[] buffer)
+        private void ProcessFrame(byte[] buffer, Type t)
         {
-            T aux = ByteArrayToStructure<T>(buffer);
+            
+            object aux = ByteArrayToStructure(buffer, t);
             if (DataReceived != null) DataReceived(aux);
         }
 
-        private T ByteArrayToStructure<T>(byte[] bytes) where T : struct
+        private object ByteArrayToStructure (byte[] bytes, Type t) //where T : struct
         {
             GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-            T stuff = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(),
-                typeof(T));
+            object stuff = Marshal.PtrToStructure(handle.AddrOfPinnedObject(),
+                t);
             handle.Free();
             return stuff;
         }
 
 
-        private static byte[] StructToByteArray<T>(T data) where T : struct
+        private static byte[] StructToByteArray<T>(T data) //where T : struct
         {
             byte[] rawData = new byte[Marshal.SizeOf(data)];
             GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
