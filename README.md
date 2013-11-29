@@ -26,6 +26,53 @@ Install
 
 * Run EasyTranferTest.
 
+Use
+--------------
+
+Arduino side sample structure definition
+        
+        struct SEND_DATA_STRUCTURE1 {
+          //put your variable definitions here for the data you want to send
+          //THIS MUST BE EXACTLY THE SAME ON THE OTHER ARDUINO
+          int16_t ax;
+          int16_t ay;
+          int16_t az;
+        };
+
+.NET side same structure definition
+
+    public struct IMU_DATA1
+    {
+        public Int16 ax;
+        public Int16 ay;
+        public Int16 az;
+    }
+
+Arduino setup
+
+        Serial.begin(38400);
+
+        // register structs in order
+        ET.RegisterMessageType(details(imu_data1));     // Message type 0
+        ET.RegisterMessageType(details(imu_data2));	 // Message type 1
+        ET.begin(&Serial);
+    
+Arduino push 
+
+        void loop() {
+            // read raw accel/gyro measurements from device
+            imu_data1.ax = 1;
+            imu_data1.ay = 2;
+            imu_data1.az = 3;
+            
+        	imu_data2.gx = 4;
+            imu_data2.gy = 5;
+            imu_data2.gz = 6;
+           
+            ET.sendData(0);
+            ET.sendData(1);
+        }
+
 
 
 
