@@ -18,11 +18,13 @@ You need:
 
 Install
 --------------
-Deploy into Arduino ArduinoSample.ino
-Connect Arduino trought serial port
-Config POrt Name:
+* Deploy into Arduino ArduinoSample.ino
+* Connect Arduino trought serial port
+* Config Port Name:
+
         reader.Begin("COM17", 38400);
-Run EasyTranferTest.
+
+* Run EasyTranferTest.
 
 
 
