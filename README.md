@@ -8,7 +8,23 @@ Send binary data from Arduino to .NET throught serial port.
 * Checksum
 * Easy
 
-- Install
+Setup
+--------------
+You need:
+* Visual Studio 2010>
+* Arduino Studio
+* Arduino compatible board
+* EasyTransfer Arduino Lib https://github.com/madsci1016/Arduino-EasyTransfer
+
+Install
+--------------
+Deploy into Arduino ArduinoSample.ino
+Connect Arduino trought serial port
+Config POrt Name:
+        reader.Begin("COM17", 38400);
+Run EasyTranferTest.
+
+
 
 
 
