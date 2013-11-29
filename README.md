@@ -69,10 +69,30 @@ Arduino push
             imu_data2.gy = 5;
             imu_data2.gz = 6;
            
-            ET.sendData(0);
-            ET.sendData(1);
+            ET.sendData(0);  // send imu_data1
+            ET.sendData(1);  // send imu_data2
         }
 
+.NET receive data
+
+            EasyTransfer reader = new EasyTransfer();
+
+            reader.Begin("COM17", 38400);
+            reader.RegisterMessageType(typeof(IMU_DATA1));
+            reader.RegisterMessageType(typeof(IMU_DATA2));
+
+            reader.DataReceived = (obj) => {
+                if (obj is IMU_DATA1)
+                {
+                    var imu = (IMU_DATA1)obj;
+                    Console.WriteLine(FramerateCounter.CalculateFrameRate() + "IMU_DATA1> \tAx:" + imu.ax + "\tAy:" + imu.ay + "\tAz:" + imu.az );
+                }
+                if (obj is IMU_DATA2)
+                {
+                    var imu = (IMU_DATA2)obj;
+                    Console.WriteLine(FramerateCounter.CalculateFrameRate() + "IMU_DATA2> \tGx:" + imu.gx + "\tGy:" + imu.gy + "\tGz:" + imu.gz);
+                }
+            };
 
 
 
