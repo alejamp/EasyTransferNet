@@ -56,8 +56,8 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\arduino1.0.3\arduino-1.0.3\hardware\arduino\cores\arduino;C:\arduino1.0.3\arduino-1.0.3\hardware\arduino\variants\eightanaloginputs;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\avr\include\;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\avr\include\avr\;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\avr\;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\Alejandro\Documents\Arduino\ArduinoEasyTransfer\Visual Micro\.ArduinoEasyTransfer.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\arduino1.0.3\arduino-1.0.3\hardware\arduino\cores\arduino;C:\arduino1.0.3\arduino-1.0.3\hardware\arduino\variants\eightanaloginputs;C:\arduino1.0.3\arduino-1.0.3\libraries\Servo;C:\arduino1.0.3\arduino-1.0.3\libraries\Servo\utility;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\avr\include\;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\avr\include\avr\;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\avr\;c:\arduino1.0.3\arduino-1.0.3\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\Alejandro\Documents\GitHub\EasyTransferNet\ArduinoEasyTransfer\Visual Micro\.ArduinoEasyTransfer.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <PreprocessorDefinitions>__AVR_ATmega328P__;ARDUINO=103;ARDUINO_MAIN;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace EasyTransferNet
 {
 
-    public struct MessageType
+    public class MessageType
     {
         public int structSize;
         public Type StructType;
@@ -58,6 +58,16 @@ namespace EasyTransferNet
             });
         }
 
+        public MessageType GetRegisteredMessageType(object data)
+        {
+            var td = data.GetType();
+            foreach (var t in _messageTypes)
+            {
+                if (t.StructType == td) return t;
+            }
+            return null;
+        }
+
         private void Stop()
         {
             _serialPort.Close();
@@ -65,8 +75,28 @@ namespace EasyTransferNet
             frameSize = 0;
         }
 
+        public void Send(object data)
+        {
+            var mt = GetRegisteredMessageType(data);
+            byte mtindex = (byte)_messageTypes.IndexOf(mt);
+            if (mt == null) throw new Exception("MessageType not found. Please send only registered structs.");
+
+            var b = new byte[] { 0x06, 0x85, (byte)mtindex, (byte)mt.structSize};
+            _serialPort.Write(b, 0 , b.Length);
+            
+            var payload = StructToByteArray(data);
+            byte CS = (byte)mt.structSize;
+            for (int i = 0; i < mt.structSize; i++)
+            {
+                CS ^= payload[i];
+            }
+            _serialPort.Write(payload, 0, payload.Length);
+            _serialPort.Write(new byte[] { CS }, 0, 1);
+        }
+
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
+            //Console.WriteLine("Serial:" + _serialPort.ReadExisting());
             SerialPort com = (SerialPort)sender;
 
 
@@ -127,7 +157,7 @@ namespace EasyTransferNet
             if (DataReceived != null) DataReceived(aux);
         }
 
-        private object ByteArrayToStructure (byte[] bytes, Type t) //where T : struct
+        private object ByteArrayToStructure (byte[] bytes, Type t) 
         {
             GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
             object stuff = Marshal.PtrToStructure(handle.AddrOfPinnedObject(),
@@ -137,7 +167,7 @@ namespace EasyTransferNet
         }
 
 
-        private static byte[] StructToByteArray<T>(T data) //where T : struct
+        private static byte[] StructToByteArray(object data) 
         {
             byte[] rawData = new byte[Marshal.SizeOf(data)];
             GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);

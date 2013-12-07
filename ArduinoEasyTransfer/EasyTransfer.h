@@ -66,8 +66,12 @@ uint8_t rx_array_inx;  //index for RX parsing buffer
 uint8_t rx_len;		//RX packet length according to the packet
 uint8_t calc_CS;	   //calculated Chacksum
 
-STRUCT_DESC message_types[2];	// 10 messages max
+bool header;
+
+STRUCT_DESC message_types[10];	// 10 messages max
 byte message_types_count;
+STRUCT_DESC mt;
+int currentMessageType;
 
 };
 

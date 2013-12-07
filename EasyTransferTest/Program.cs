@@ -8,6 +8,12 @@ using EasyTransferNet;
 
 namespace EasyTransferTest
 {
+    public struct ServoOut
+    {
+        public Int16 pos1;
+        public Int16 pos2;
+    }
+
     public struct IMU_DATA1
     {
         public Int16 ax;
@@ -34,6 +40,7 @@ namespace EasyTransferTest
             reader.Begin("COM17", 38400);
             reader.RegisterMessageType(typeof(IMU_DATA1));
             reader.RegisterMessageType(typeof(IMU_DATA2));
+            reader.RegisterMessageType(typeof(ServoOut));
 
             reader.DataReceived = (obj) => {
                 if (obj is IMU_DATA1)
@@ -48,9 +55,18 @@ namespace EasyTransferTest
                 }
             };
 
-            Console.WriteLine("Press any key to continue...");
-            Console.WriteLine();
-            Console.ReadKey();
+            while (true)
+            {
+                Console.WriteLine("Press any key to send data");
+                var k = Console.ReadKey();
+
+                if (k.Key == ConsoleKey.Escape) break;
+                var spos = Int16.Parse(new String(k.KeyChar,1));
+                var sdata = new ServoOut();
+                sdata.pos1 = (short)(525 + spos * 10);
+                sdata.pos2 = (short)(510 + spos * 10);
+                reader.Send(sdata);        
+            }
         }
 
     }

@@ -34,7 +34,7 @@ extern "C" void __cxa_pure_virtual() {;}
 
 #include "C:\arduino1.0.3\arduino-1.0.3\hardware\arduino\variants\eightanaloginputs\pins_arduino.h" 
 #include "C:\arduino1.0.3\arduino-1.0.3\hardware\arduino\cores\arduino\arduino.h"
-#include "C:\Users\Alejandro\Documents\Arduino\ArduinoEasyTransfer\ArduinoEasyTransfer.ino"
-#include "C:\Users\Alejandro\Documents\Arduino\ArduinoEasyTransfer\EasyTransfer.cpp"
-#include "C:\Users\Alejandro\Documents\Arduino\ArduinoEasyTransfer\EasyTransfer.h"
+#include "C:\Users\Alejandro\Documents\GitHub\EasyTransferNet\ArduinoEasyTransfer\ArduinoEasyTransfer.ino"
+#include "C:\Users\Alejandro\Documents\GitHub\EasyTransferNet\ArduinoEasyTransfer\EasyTransfer.cpp"
+#include "C:\Users\Alejandro\Documents\GitHub\EasyTransferNet\ArduinoEasyTransfer\EasyTransfer.h"
 #endif
