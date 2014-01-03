@@ -43,7 +43,7 @@ SERVO_OUTPUT servo_data3;
 
 void setup() {
 
-    Serial.begin(38400);
+    Serial.begin(115200);
 
 	// register structs in order
     ET.RegisterMessageType(details(imu_data1));		// Message type 0

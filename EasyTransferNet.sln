@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyTransferTest", "EasyTra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyTransferNet", "EasyTransferNet\EasyTransferNet.csproj", "{0C0F475A-5743-48A8-9E8C-3B3B4766D4FE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoEasyTransfer", "..\..\Arduino\ArduinoEasyTransfer\ArduinoEasyTransfer.vcxproj", "{5BF80D89-FD98-4D4B-AD04-AB4AC553B9E4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoEasyTransfer", "ArduinoEasyTransfer\ArduinoEasyTransfer.vcxproj", "{5BF80D89-FD98-4D4B-AD04-AB4AC553B9E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

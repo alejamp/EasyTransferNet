@@ -37,7 +37,7 @@ namespace EasyTransferTest
         {
             EasyTransfer reader = new EasyTransfer();
 
-            reader.Begin("COM17", 38400);
+            reader.Begin("COM17", 115200);
             reader.RegisterMessageType(typeof(IMU_DATA1));
             reader.RegisterMessageType(typeof(IMU_DATA2));
             reader.RegisterMessageType(typeof(ServoOut));

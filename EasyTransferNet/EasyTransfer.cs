@@ -68,11 +68,11 @@ namespace EasyTransferNet
             return null;
         }
 
-        private void Stop()
+        public void Stop()
         {
-            _serialPort.Close();
             frameBuffer.Clear();
             frameSize = 0;
+            _serialPort.Close();
         }
 
         public void Send(object data)
@@ -81,8 +81,9 @@ namespace EasyTransferNet
             byte mtindex = (byte)_messageTypes.IndexOf(mt);
             if (mt == null) throw new Exception("MessageType not found. Please send only registered structs.");
 
-            var b = new byte[] { 0x06, 0x85, (byte)mtindex, (byte)mt.structSize};
-            _serialPort.Write(b, 0 , b.Length);
+            List<byte> buffer = new List<byte>();
+            buffer.AddRange (new byte[] { 0x06, 0x85, (byte)mtindex, (byte)mt.structSize});
+            //_serialPort.Write(b, 0 , b.Length);
             
             var payload = StructToByteArray(data);
             byte CS = (byte)mt.structSize;
@@ -90,8 +91,9 @@ namespace EasyTransferNet
             {
                 CS ^= payload[i];
             }
-            _serialPort.Write(payload, 0, payload.Length);
-            _serialPort.Write(new byte[] { CS }, 0, 1);
+            buffer.AddRange(payload);
+            buffer.Add(CS);
+            _serialPort.Write(buffer.ToArray(), 0, buffer.Count);
         }
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
@@ -114,7 +116,9 @@ namespace EasyTransferNet
                 if (frameSize == 0)
                     if (com.ReadByte() == 0x85)
                     {
-                        _currentMessageType = _messageTypes[(byte)com.ReadByte()];
+                        var t = (byte)com.ReadByte(); 
+                        if (t>=_messageTypes.Count) return;
+                        _currentMessageType = _messageTypes[t];
                         frameSize = com.ReadByte();
                         if (frameSize != _currentMessageType.structSize) return;
                     }

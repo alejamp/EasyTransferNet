@@ -82,7 +82,8 @@ boolean EasyTransfer::receiveData(){
   //we get here if we already found the header bytes, the struct size matched what we know, and now we are byte aligned.
   if(rx_len != 0){
     while(_serial->available() && mt.rx_array_inx <= rx_len){
-      mt.rx_buffer[mt.rx_array_inx++] = _serial->read();
+      mt.rx_buffer[mt.rx_array_inx] = _serial->read();
+	  mt.rx_array_inx++;
     }
     
     if(rx_len == (mt.rx_array_inx-1)){
